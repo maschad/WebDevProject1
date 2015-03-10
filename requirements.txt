@@ -5,6 +5,8 @@ flask
 Flask-WTF
 Flask-SQLAlchemy
 Flask-Migrate
+Flask-Login
+Flask-OpenId
 psycopg2
 
 # ----------------------
