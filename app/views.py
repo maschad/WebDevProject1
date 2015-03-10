@@ -7,25 +7,47 @@ This file creates your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for,jsonify
+from flask import render_template, request, redirect, url_for,jsonify,g,session
 from app import db
 
 from flask.ext.wtf import Form 
 from wtforms.fields import TextField # other fields include PasswordField 
 from wtforms.validators import Required, Email
 from app.models import Myprofile
+from app.forms import LoginForm
+
+from flask.ext.login import login_user, logout_user, current_user, login_required
+from app import app, db, lm, oid
+from app import oid, lm
 
 class ProfileForm(Form):
      first_name = TextField('First Name', validators=[Required()])
      last_name = TextField('Last Name', validators=[Required()])
      # evil, don't do this
      image = TextField('Image', validators=[Required(), Email()])
- 
 
+
+@app.before_request
+def before_request():
+    g.user = current_user
+    
 ###
 # Routing for your application.
 ###
-
+@app.route('/login', methods=['GET', 'POST'])
+@oid.loginhandler
+def login():
+    if g.user is not None and g.user.is_authenticated():
+        return redirect(url_for('index'))
+    form = LoginForm()
+    print app.config['OPENID_PROVIDERS']
+    if form.validate_on_submit():
+        session['remember_me'] = form.remember_me.data
+        return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
+    return render_template('login.html', 
+                           title='Sign In',
+                           form=form,
+                           providers=app.config['OPENID_PROVIDERS'])
 @app.route('/')
 def home():
     """Render website's home page."""
