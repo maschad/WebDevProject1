@@ -1,31 +1,31 @@
-Flask App
-============
+Flask App (User app)
+==================================
 
 What is this?
 -------------
+This application includes a User model that is compatible with [Flask Login](https://flask-login.readthedocs.org).
+We've also included a migration script which depends on [Flask Migrate](https://flask-migrate.readthedocs.org)
 
-This is a template to help you get a 
-[Flask](http://flask.pocoo.org/) app running on
-[Heroku](https://www.heroku.com/).
+This is a  
+[Flask](http://flask.pocoo.org/) app that can be deployed to [Heroku](https://www.heroku.com/).
 
 It is based on [flask_heroku](github.com/zachwill/flask_heroku)
 
-But follows the structure from the [Flask megatutorial](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
+It follows the structure from the [Flask megatutorial](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world)
 
-We also removed the dependency on gevent
 
 
 Prerequisites
 -------------
 
-It is assumed that you've installed the heroku toolbelet](http://toolbelt.heroku.com)
+It is assumed that you've installed the [heroku toolbelt](http://toolbelt.heroku.com)
 
 Instructions
 ------------
 
 Clone the repo.
 
-    git clone git@github.com:info3180/flask_app.git
+    git clone git@github.com:info3180/demo_user_app.git
     cd flask_app
     
 To clear the git history, remove the .git/ folder
