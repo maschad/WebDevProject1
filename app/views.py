@@ -15,22 +15,51 @@ from wtforms.fields import TextField # other fields include PasswordField
 from wtforms.validators import Required, Email
 from app.models import Myprofile
 
-class ProfileForm(Form):
-     first_name = TextField('First Name', validators=[Required()])
-     last_name = TextField('Last Name', validators=[Required()])
-     # evil, don't do this
-     image = TextField('Image', validators=[Required(), Email()])
- 
+from flask.ext.login import login_user,current_user,login_required,login_url
+from flask.ext.login import LoginManager
+
+from forms import ProfileForm, LoginForm
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(userid):
+    return Myprofile.query.get(userid)
+
+
+#from app import load_user
 
 ###
 # Routing for your application.
 ###
 
 @app.route('/')
+@login_required
 def home():
     """Render website's home page."""
     return render_template('home.html')
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if request.method == "POST":
+        pass
+    # change this to actually validate the user
+    if form.username.data:
+        # login and validate the user...
+
+        # missing
+        # based on password and username
+        # get user id, load into session
+        user = load_user("1")
+        login_user(user)
+        #flash("Logged in successfully.")
+        return redirect(request.args.get("next") or url_for("home"))
+    return render_template("login.html", form=form)
+  
+  
 @app.route('/profile/', methods=['POST','GET'])
 def profile_add():
     if request.method == 'POST':

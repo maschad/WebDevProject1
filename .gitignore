@@ -4,6 +4,7 @@ env
 .Python
 include
 lib
+*.swp
 
 # Python Packages
 *.egg
