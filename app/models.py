@@ -2,7 +2,8 @@ from . import db
 class Myprofile(db.Model):     
     id = db.Column(db.Integer, primary_key=True)     
     first_name = db.Column(db.String(80))     
-    last_name = db.Column(db.String(80)) 
+    last_name = db.Column(db.String(80))
+    password = db.Column(db.String(80))
     nickname = db.Column(db.String(80), unique=True)    
     email = db.Column(db.String(120), index=True, unique=True)
  
