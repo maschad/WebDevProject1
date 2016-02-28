@@ -1,13 +1,18 @@
-from flask.ext.wtf import Form 
-from wtforms.fields import TextField,PasswordField # other fields include PasswordField 
+from flask.ext.wtf import Form
+from flask.ext.wtf.file import FileAllowed,FileRequired
+from wtforms.fields import TextField,PasswordField,SelectField,FileField,SubmitField # other fields include PasswordField
 from wtforms.validators import Required, Email
 
 
 class ProfileForm(Form):
+     username = TextField('Username', validators=[Required()])
      first_name = TextField('First Name', validators=[Required()])
      last_name = TextField('Last Name', validators=[Required()])
-     # evil, don't do this
-     image = TextField('Image', validators=[Required(), Email()])
+     age = TextField('Age',validators=[Required()])
+     sex = SelectField('Sex',choices=[('M','Male'),('F','Female')])
+     image = FileField(u'Image File',validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images only!')])
+     submit = SubmitField("Send")
+
 
 class LoginForm(Form):
      username = TextField('Username', validators=[Required()])

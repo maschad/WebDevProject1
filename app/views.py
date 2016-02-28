@@ -6,22 +6,14 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
 from flask import render_template, request, redirect, url_for,jsonify,g,session
-from app import db
 
-from flask.ext.wtf import Form 
-from wtforms.fields import TextField # other fields include PasswordField 
-from wtforms.validators import Required, Email
 from app.models import Myprofile
-from app.forms import LoginForm
 
-from flask.ext.login import login_user, logout_user, current_user, login_required
-from app import app, db, lm, oid
-from app import oid, lm
+from app import app, db
+from app import oid
 
-<<<<<<< HEAD
-from flask.ext.login import login_user,current_user,login_required,login_url
+from flask.ext.login import login_user,current_user,login_required
 from flask.ext.login import LoginManager
 
 from forms import ProfileForm, LoginForm
@@ -33,16 +25,6 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(userid):
     return Myprofile.query.get(userid)
-
-
-#from app import load_user
-=======
-class ProfileForm(Form):
-     first_name = TextField('First Name', validators=[Required()])
-     last_name = TextField('Last Name', validators=[Required()])
-     # evil, don't do this
-     image = TextField('Image', validators=[Required(), Email()])
->>>>>>> 5d6d4045e3158dda305fd6c8875f3fcf48bb8bf5
 
 
 @app.before_request
@@ -66,14 +48,7 @@ def login():
                            title='Sign In',
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
-@app.route('/')
-@login_required
-def home():
-    """Render website's home page."""
-    return render_template('home.html')
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
+def login_validate():
     form = LoginForm()
     if request.method == "POST":
         pass
@@ -89,17 +64,31 @@ def login():
         #flash("Logged in successfully.")
         return redirect(request.args.get("next") or url_for("home"))
     return render_template("login.html", form=form)
+
+@app.route('/')
+@login_required
+def home():
+    """Render website's home page."""
+    return render_template('home.html')
+
   
-  
-@app.route('/profile/', methods=['POST','GET'])
+@app.route('/profile', methods=['POST','GET'])
 def profile_add():
     if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
+        age = request.form['age']
+        image = request.form['image']
+        username = request.form['username']
+        sex = request.form['sex']
 
         # write the information to the database
         newprofile = Myprofile(first_name=first_name,
-                               last_name=last_name)
+                               last_name=last_name,
+                               age=age,
+                               sex=sex,
+                               username=username,
+                               image=image)
         db.session.add(newprofile)
         db.session.commit()
 

@@ -8,8 +8,12 @@
 {% block main %}
 <form action="{{ url_for('profile_add') }}" method="post">
 
+       username: {{ form.username }} <br />
        first name: {{ form.first_name }}<br />
-       last_name: {{ form.last_name }}<br />    
+       last_name: {{ form.last_name }}<br />
+       age: {{ form.age }} <br />
+       sex: {{ form.sex }}<br />
+       image: {{ form.image }}<br />
        <input type="submit" />                
 
 </form> 

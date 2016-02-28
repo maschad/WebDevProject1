@@ -3,7 +3,10 @@ class Myprofile(db.Model):
     id = db.Column(db.Integer, primary_key=True)     
     first_name = db.Column(db.String(80))     
     last_name = db.Column(db.String(80)) 
-    username = db.Column(db.String(80), unique=True)     
+    username = db.Column(db.String(80), unique=True)
+    image = db.Column(db.String(120))
+    age = db.Column(db.Integer)
+    sex = db.Column(db.String(20))
     
     def is_authenticated(self):
         return True
