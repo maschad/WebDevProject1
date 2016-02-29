@@ -78,7 +78,7 @@ def home():
 @app.route('/profile', methods=['POST','GET'])
 def profile_add():
     form = ProfileForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and form.validate():
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         age = request.form['age']
@@ -107,8 +107,8 @@ def profile_add():
 @app.route('/profiles/',methods=["POST","GET"])
 def profile_list():
     profiles = Myprofile.query.all()
-    if request.method == "POST":
-        return jsonify({"age":4, "name":"John"})
+    if request.method == "GET":
+        return jsonify(username=str(profiles[1]))
     return render_template('profile_list.html',
                             profiles=profiles)
 
