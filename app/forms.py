@@ -9,7 +9,7 @@ class ProfileForm(Form):
      last_name = TextField('Last Name', [validators.Required()])
      age = TextField('Age',[validators.Required()])
      sex = SelectField('Sex',choices=[('M','Male'),('F','Female')])
-     image = FileField('Image File',validators =[FileRequired(),FileAllowed(['jpg', 'png'], 'Images only!')])
+     image = StringField('Image File',validators =[FileRequired(),FileAllowed(['jpg', 'png'], 'Images only!')])
      submit = SubmitField("Send")
 
 

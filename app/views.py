@@ -77,14 +77,15 @@ def home():
   
 @app.route('/profile', methods=['POST','GET'])
 def profile_add():
-
     form = ProfileForm()
-
-    if request.method == "POST":
+    if request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         age = request.form['age']
-        image = request.form['image']
+        file = request.files['image']
+        filename = file.filename
+        file.save(os.path.join('app/static/uploads', filename))
+
         username = request.form['username']
         sex = request.form['sex']
 
@@ -94,7 +95,7 @@ def profile_add():
                                age=age,
                                sex=sex,
                                username=username,
-                               image=image)
+                               image='/static/uploads/'+filename)
         db.session.add(newprofile)
         db.session.commit()
 
@@ -111,7 +112,7 @@ def profile_list():
     return render_template('profile_list.html',
                             profiles=profiles)
 
-@app.route('/profile/<int:id>')
+@app.route('/profile/<int:id>',methods=["POST","GET"])
 def profile_view(id):
     profile = Myprofile.query.get(id)
     date = timeinfo()
