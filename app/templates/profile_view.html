@@ -6,8 +6,17 @@
 
 
 {% block main %}
-
-{{profile.first_name}}
-{{profile.last_name}}
-
+<div class="container">
+  <div class="panel panel-success">
+      <div class="panel-heading">{{ profile.first_name }} {{ profile.last_name }}
+          <img src="{{ profile.image }}" width="200px" class="img-responsive" alt="Responsive image">
+      </div>
+      <div class="panel-body">{{date}}
+          <li class="list-group-item">Username: {{ profile.username }}</li>
+          <li class="list-group-item">ID: {{ profile.id }}</li>
+          <li class="list-group-item">Sex: {{ profile.sex }}</li>
+          <li class="list-group-item">Age: {{ profile.age }}</li>
+      </div>
+  </div>
+</div>
 {% endblock %}

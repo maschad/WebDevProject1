@@ -6,15 +6,17 @@
 
 
 {% block main %}
-<form action="{{ url_for('profile_add') }}" method="post">
-
-       username: {{ form.username }} <br />
-       first name: {{ form.first_name }}<br />
-       last_name: {{ form.last_name }}<br />
-       age: {{ form.age }} <br />
-       sex: {{ form.sex }}<br />
-       image: {{ form.image }}<br />
-       <input type="submit" />                
-
+<form action="{{ url_for('profile_add') }}" method="post" enctype="multipart/form-data">
+    <div class="container">
+        <div class="well well-lg">
+           <label for="username" class="control-label">User Name </label>  {{ form.username }} <br />
+           <label for="first_name" class="control-label">First Name </label> {{ form.first_name }}<br />
+           <label for="last_name" class="control-label">Last Name </label> {{ form.last_name }}<br />
+           <label for="age" class="control-label">Age </label> {{ form.age }} <br />
+           <label for="sex" class="control-label">Sex </label> {{ form.sex }}<br />
+           <label for="image" class="control-label"> Image </label> {{ form.image }}<br />
+           <input type="submit" class="btn btn-success"/>
+        </div>
+    </div>
 </form> 
 {% endblock %}

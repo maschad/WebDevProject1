@@ -5,6 +5,9 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 
 This file creates your application.
 """
+import time,os
+
+from werkzeug.utils import secure_filename
 
 from flask import render_template, request, redirect, url_for,jsonify,g,session
 
@@ -74,7 +77,10 @@ def home():
   
 @app.route('/profile', methods=['POST','GET'])
 def profile_add():
-    if request.method == 'POST':
+
+    form = ProfileForm()
+
+    if request.method == "POST":
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         age = request.form['age']
@@ -94,8 +100,6 @@ def profile_add():
 
         return "{} {} was added to the database".format(request.form['first_name'],
                                              request.form['last_name'])
-
-    form = ProfileForm()
     return render_template('profile_add.html',
                            form=form)
 
@@ -110,8 +114,13 @@ def profile_list():
 @app.route('/profile/<int:id>')
 def profile_view(id):
     profile = Myprofile.query.get(id)
-    return render_template('profile_view.html',profile=profile)
+    date = timeinfo()
+    return render_template('profile_view.html',profile=profile,date=date)
 
+def timeinfo():
+    """Render the current date"""
+    date ='Profile added on:' + " " + time.strftime("%a, %b %d %Y")
+    return date
 
 @app.route('/about/')
 def about():
