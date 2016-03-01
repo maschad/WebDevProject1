@@ -109,7 +109,7 @@ def profile_add():
 def profile_list():
     profiles = Myprofile.query.all()
     profilelist = []
-    if request.method == 'POST':
+    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
         for item in profiles:
             profilelist.append('{username:'+ item.username + ' ,' + 'userid:' + str(item.id) + '}')
         return jsonify(users=profilelist)
@@ -121,7 +121,7 @@ def profile_view(id):
     profile = Myprofile.query.get(id)
     toret = []
     date = timeinfo()
-    if request.method == 'POST':
+    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
             toret.append('userid: ' + str(profile.id) + ', username: '
                          + profile.username + ', image: ' + profile.image + ', sex: ' + profile.sex + ', age: '
                          + str(profile.age))
