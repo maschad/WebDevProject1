@@ -7,6 +7,7 @@ This file creates your application.
 """
 import time,os
 
+import flask
 from werkzeug.utils import secure_filename
 
 from flask import render_template, request, redirect, url_for,jsonify,g,session
@@ -107,8 +108,11 @@ def profile_add():
 @app.route('/profiles/',methods=["POST","GET"])
 def profile_list():
     profiles = Myprofile.query.all()
-    if request.method == "GET":
-        return jsonify(username=str(profiles[1]))
+    profilelist = []
+    if request.method == "POST":
+        for item in profiles:
+            profilelist.append('{username:'+ item.username + ' ,' + 'userid:' + str(item.id) + '}')
+        return jsonify(users=profilelist)
     return render_template('profile_list.html',
                             profiles=profiles)
 
