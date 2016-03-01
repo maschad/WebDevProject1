@@ -5,26 +5,30 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 
 This file creates your application.
 """
+import time,os
 
-from app import app
+import flask
+from werkzeug.utils import secure_filename
+
 from flask import render_template, request, redirect, url_for,jsonify,g,session
-from app import db
 
-from flask.ext.wtf import Form 
-from wtforms.fields import TextField # other fields include PasswordField 
-from wtforms.validators import Required, Email
 from app.models import Myprofile
-from app.forms import LoginForm
 
-from flask.ext.login import login_user, logout_user, current_user, login_required
-from app import app, db, lm, oid
-from app import oid, lm
+from app import app, db
+from app import oid
 
-class ProfileForm(Form):
-     first_name = TextField('First Name', validators=[Required()])
-     last_name = TextField('Last Name', validators=[Required()])
-     # evil, don't do this
-     image = TextField('Image', validators=[Required(), Email()])
+from flask.ext.login import login_user,current_user,login_required
+from flask.ext.login import LoginManager
+
+from forms import ProfileForm, LoginForm
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+@login_manager.user_loader
+def load_user(userid):
+    return Myprofile.query.get(userid)
 
 
 @app.before_request
@@ -48,43 +52,86 @@ def login():
                            title='Sign In',
                            form=form,
                            providers=app.config['OPENID_PROVIDERS'])
+def login_validate():
+    form = LoginForm()
+    if request.method == "POST":
+        pass
+    # change this to actually validate the user
+    if form.username.data:
+        # login and validate the user...
+
+        # missing
+        # based on password and username
+        # get user id, load into session
+        user = load_user("1")
+        login_user(user)
+        #flash("Logged in successfully.")
+        return redirect(request.args.get("next") or url_for("home"))
+    return render_template("login.html", form=form)
+
 @app.route('/')
+@login_required
 def home():
     """Render website's home page."""
     return render_template('home.html')
 
-@app.route('/profile/', methods=['POST','GET'])
+  
+@app.route('/profile', methods=['POST','GET'])
 def profile_add():
-    if request.method == 'POST':
+    form = ProfileForm()
+    if request.method == 'POST' and form.validate():
         first_name = request.form['first_name']
         last_name = request.form['last_name']
+        age = request.form['age']
+        file = request.files['image']
+        filename = file.filename
+        file.save(os.path.join('app/static/uploads', filename))
+
+        username = request.form['username']
+        sex = request.form['sex']
 
         # write the information to the database
         newprofile = Myprofile(first_name=first_name,
-                               last_name=last_name)
+                               last_name=last_name,
+                               age=age,
+                               sex=sex,
+                               username=username,
+                               image='/static/uploads/'+filename)
         db.session.add(newprofile)
         db.session.commit()
 
         return "{} {} was added to the database".format(request.form['first_name'],
                                              request.form['last_name'])
-
-    form = ProfileForm()
     return render_template('profile_add.html',
                            form=form)
 
 @app.route('/profiles/',methods=["POST","GET"])
 def profile_list():
     profiles = Myprofile.query.all()
-    if request.method == "POST":
-        return jsonify({"age":4, "name":"John"})
+    profilelist = []
+    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
+        for item in profiles:
+            profilelist.append('{username:'+ item.username + ' ,' + 'userid:' + str(item.id) + '}')
+        return jsonify(users=profilelist)
     return render_template('profile_list.html',
                             profiles=profiles)
 
-@app.route('/profile/<int:id>')
+@app.route('/profile/<int:id>',methods=["POST","GET"])
 def profile_view(id):
     profile = Myprofile.query.get(id)
-    return render_template('profile_view.html',profile=profile)
+    toret = []
+    date = timeinfo()
+    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
+            toret.append('userid: ' + str(profile.id) + ', username: '
+                         + profile.username + ', image: ' + profile.image + ', sex: ' + profile.sex + ', age: '
+                         + str(profile.age))
+            return jsonify(result=toret)
+    return render_template('profile_view.html',profile=profile,date=date)
 
+def timeinfo():
+    """Render the current date"""
+    date ='Profile added on:' + " " + time.strftime("%a, %b %d %Y")
+    return date
 
 @app.route('/about/')
 def about():

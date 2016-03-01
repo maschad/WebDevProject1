@@ -2,12 +2,11 @@ from . import db
 class Myprofile(db.Model):     
     id = db.Column(db.Integer, primary_key=True)     
     first_name = db.Column(db.String(80))     
-    last_name = db.Column(db.String(80))
-    password = db.Column(db.String(80))
-    nickname = db.Column(db.String(80), unique=True)    
-    email = db.Column(db.String(120), index=True, unique=True)
- 
-
+    last_name = db.Column(db.String(80)) 
+    username = db.Column(db.String(80), unique=True)
+    image = db.Column(db.String(120))
+    age = db.Column(db.Integer)
+    sex = db.Column(db.String(20))
     
     def is_authenticated(self):
         return True
@@ -25,4 +24,4 @@ class Myprofile(db.Model):
             return str(self.id)  # python 3 support
 
     def __repr__(self):
-        return '<User %r>' % (self.nickname)
+        return '<User %r>' % (self.username)

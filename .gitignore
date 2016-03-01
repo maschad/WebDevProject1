@@ -1,9 +1,13 @@
+#JetBrains
+.idea
+
 # Virtualenv
 venv
 env
 .Python
 include
 lib
+*.swp
 # Created by https://www.gitignore.io  ### Vim ### 
 [._]*.s[a-w][a-z] 
 [._]s[a-w][a-z] 
