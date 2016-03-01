@@ -109,7 +109,7 @@ def profile_add():
 def profile_list():
     profiles = Myprofile.query.all()
     profilelist = []
-    if request.method == "POST":
+    if request.method == 'POST':
         for item in profiles:
             profilelist.append('{username:'+ item.username + ' ,' + 'userid:' + str(item.id) + '}')
         return jsonify(users=profilelist)
@@ -119,7 +119,13 @@ def profile_list():
 @app.route('/profile/<int:id>',methods=["POST","GET"])
 def profile_view(id):
     profile = Myprofile.query.get(id)
+    toret = []
     date = timeinfo()
+    if request.method == 'POST':
+            toret.append('userid: ' + str(profile.id) + ', username: '
+                         + profile.username + ', image: ' + profile.image + ', sex: ' + profile.sex + ', age: '
+                         + str(profile.age))
+            return jsonify(result=toret)
     return render_template('profile_view.html',profile=profile,date=date)
 
 def timeinfo():
