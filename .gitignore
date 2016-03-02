@@ -2,6 +2,7 @@
 .idea
 
 # Virtualenv
+/mydb.dump
 venv
 env
 .Python
