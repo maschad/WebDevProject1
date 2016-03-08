@@ -5,72 +5,20 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 
 This file creates your application.
 """
-import time,os
+import os
+import time
 
-import flask
-from werkzeug.utils import secure_filename
-
-from flask import render_template, request, redirect, url_for,jsonify,g,session
-
-from app.models import Myprofile
+from flask import render_template, request, jsonify
 
 from app import app, db
-from app import oid
+from app.models import Myprofile
+from forms import ProfileForm
 
-from flask.ext.login import login_user,current_user,login_required
-from flask.ext.login import LoginManager
-
-from forms import ProfileForm, LoginForm
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = "login"
-
-@login_manager.user_loader
-def load_user(userid):
-    return Myprofile.query.get(userid)
-
-
-@app.before_request
-def before_request():
-    g.user = current_user
     
 ###
 # Routing for your application.
 ###
-@app.route('/login', methods=['GET', 'POST'])
-@oid.loginhandler
-def login():
-    if g.user is not None and g.user.is_authenticated():
-        return redirect(url_for('index'))
-    form = LoginForm()
-    print app.config['OPENID_PROVIDERS']
-    if form.validate_on_submit():
-        session['remember_me'] = form.remember_me.data
-        return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
-    return render_template('login.html', 
-                           title='Sign In',
-                           form=form,
-                           providers=app.config['OPENID_PROVIDERS'])
-def login_validate():
-    form = LoginForm()
-    if request.method == "POST":
-        pass
-    # change this to actually validate the user
-    if form.username.data:
-        # login and validate the user...
-
-        # missing
-        # based on password and username
-        # get user id, load into session
-        user = load_user("1")
-        login_user(user)
-        #flash("Logged in successfully.")
-        return redirect(request.args.get("next") or url_for("home"))
-    return render_template("login.html", form=form)
-
 @app.route('/')
-@login_required
 def home():
     """Render website's home page."""
     return render_template('home.html')
