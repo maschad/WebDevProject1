@@ -11,7 +11,7 @@ def username_validator(form , field):
     return True
 
 class ProfileForm(Form):
-     username = TextField('Username', validators=[username_validator(),Required()])
+     username = TextField('Username', validators=[username_validator,Required()])
      first_name = TextField('First Name', [validators.Required()])
      last_name = TextField('Last Name', [validators.Required()])
      age = IntegerField('Age',[validators.Required()])
