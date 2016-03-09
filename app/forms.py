@@ -4,7 +4,7 @@ from wtforms import StringField, BooleanField
 from wtforms.validators import DataRequired
 
 def username_validator(form , field):
-    user = db.session.query(User).filter_by(username=field.data).first()
+    user = db.session.query(Myprofile).filter_by(username=field.data).first()
     if user != None:
         field.errors.append('Username already taken')
         return False
