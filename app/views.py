@@ -69,7 +69,7 @@ def profile_view(id):
     profile = Myprofile.query.get(id)
     toret = []
     date = timeinfo()
-    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
+    if request.method == 'POST' and request.headers['Content-Type'] == 'application/json':
             toret.append('userid: ' + str(profile.id) + ', username: '
                          + profile.username + ', image: ' + profile.image + ', sex: ' + profile.sex + ', age: '
                          + str(profile.age))
