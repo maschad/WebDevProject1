@@ -57,7 +57,7 @@ def profile_add():
 def profile_list():
     profiles = Myprofile.query.all()
     profilelist = []
-    if request.method == 'POST' or request.headers['Content-Type'] == 'application/json':
+    if request.method == 'POST' and request.headers['Content-Type'] == 'application/json':
         for item in profiles:
             profilelist.append('{username:'+ item.username + ' ,' + 'userid:' + str(item.id) + '}')
         return jsonify(users=profilelist)
