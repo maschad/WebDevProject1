@@ -3,6 +3,13 @@ from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, BooleanField
 from wtforms.validators import DataRequired
 
+def username_validator(form , field):
+    user = db.session.query(User).filter_by(username=field.data).first()
+    if user != None:
+        field.errors.append('Username already taken')
+        return False
+    return True
+
 class ProfileForm(Form):
      username = TextField('Username', validators=[username_validator(),Required()])
      first_name = TextField('First Name', [validators.Required()])
@@ -12,9 +19,3 @@ class ProfileForm(Form):
      image = FileField('Image File',validators =[FileRequired(),FileAllowed(['jpg', 'png'], 'Images only!')])
      submit = SubmitField("Send")
 
-def username_validator(form , field):
-    user = db.session.query(User).filter_by(username=field.data).first()
-    if user != None:
-        field.errors.append('Username already taken')
-        return False
-    return True
