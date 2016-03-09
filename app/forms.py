@@ -4,7 +4,7 @@ from wtforms import StringField, BooleanField
 from wtforms.validators import DataRequired
 
 class ProfileForm(Form):
-     username = TextField('Username', validators=[validators.username_validator()])
+     username = TextField('Username', validators=[username_validator(),Required()])
      first_name = TextField('First Name', [validators.Required()])
      last_name = TextField('Last Name', [validators.Required()])
      age = IntegerField('Age',[validators.Required()])
