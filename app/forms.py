@@ -2,6 +2,8 @@ from wtforms import Form,SelectField,TextField,SubmitField,PasswordField,Integer
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, BooleanField
 from wtforms.validators import DataRequired
+from app import db
+from app.models import Myprofile
 
 def username_validator(form , field):
     user = db.session.query(Myprofile).filter_by(username=field.data).first()
