@@ -14,7 +14,7 @@ from app import app, db
 from app.models import Myprofile
 from forms import ProfileForm
 
-    
+
 ###
 # Routing for your application.
 ###
@@ -26,22 +26,22 @@ def home():
   
 @app.route('/profile', methods=['POST','GET'])
 def profile_add():
-    form = ProfileForm()
+    form = ProfileForm(request.form)
 
     if request.method == 'GET':
-        return render_template('profile_add.html', form=form)
-        
-    if form.validate():
+        return render_template('profile_add.html',form=form)
+
+    if form.validate() and request.method == 'POST':
         first_name = request.form['first_name']
         last_name = request.form['last_name']
         age = request.form['age']
         file = request.files['image']
+        username = request.form['username']
+        sex = request.form['sex']
         filename = file.filename
         file.save(os.path.join('app/static/uploads', filename))
 
-        username = request.form['username']
-        sex = request.form['sex']
-
+        
         # write the information to the database
         newprofile = Myprofile(first_name=first_name,
                                last_name=last_name,
@@ -53,8 +53,9 @@ def profile_add():
         db.session.commit()
         return "{} {} was added to the database".format(request.form['first_name'],
                                              request.form['last_name'])
-    return render_template('profile_add.html',
-                           form=form)
+
+    return render_template('profile_add.html',form=form)
+
 
 @app.route('/profiles/',methods=["POST","GET"])
 def profile_list():

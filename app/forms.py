@@ -1,9 +1,9 @@
-from wtforms import Form,SelectField,TextField,SubmitField,PasswordField,IntegerField,validators
-from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, BooleanField
-from wtforms.validators import DataRequired
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import Form,SelectField,TextField,IntegerField,validators
+
 from app import db
 from app.models import Myprofile
+
 
 def username_validator(form , field):
     user = db.session.query(Myprofile).filter_by(username=field.data).first()
@@ -12,12 +12,12 @@ def username_validator(form , field):
         return False
     return True
 
+
 class ProfileForm(Form):
-     username = TextField('Username', validators=[username_validator,validators.Required()])
-     first_name = TextField('First Name', [validators.Required()])
+     username = TextField('Username', [username_validator,validators.Length(min=4, max=25)])
+     first_name = TextField('First Name', [validators.Length(min=4, max=25)])
      last_name = TextField('Last Name', [validators.Required()])
      age = IntegerField('Age',[validators.Required()])
      sex = SelectField('Sex',choices=[('M','Male'),('F','Female')])
-     image = FileField('Image File',validators =[FileRequired(),FileAllowed(['jpg', 'png'], 'Images only!')])
-     submit = SubmitField("Send")
+     image = FileField('Image File',[FileAllowed(['jpg', 'png'], 'Images only!')])
 

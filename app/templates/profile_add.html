@@ -6,17 +6,18 @@
 
 
 {% block main %}
-<form action="{{ url_for('profile_add') }}" method="post" enctype="multipart/form-data">
-    <div class="container">
+<div class="container">
+    {% from "_form_helpers.html" import render_field %}
+    <form action="/profile" method="post" enctype="multipart/form-data">
         <div class="well well-lg">
-           <label for="username" class="control-label">User Name </label>  {{ form.username }} <br />
-           <label for="first_name" class="control-label">First Name </label> {{ form.first_name }}<br />
-           <label for="last_name" class="control-label">Last Name </label> {{ form.last_name }}<br />
-           <label for="age" class="control-label">Age </label> {{ form.age }} <br />
-           <label for="sex" class="control-label">Sex </label> {{ form.sex }}<br />
-           <label  class="control-label"> Image </label><input type="file" name="image"><br />
-           <input type="submit" class="btn btn-success"/>
+            {{ render_field(form.username) }} <br />
+            {{ render_field(form.first_name)}}<br />
+            {{ render_field(form.last_name) }}<br />
+            {{ render_field(form.age) }} <br />
+            {{ render_field(form.sex) }}<br />
+            {{ render_field(form.image) }}<br />
+            <input type="submit" class="btn btn-success"/>
         </div>
-    </div>
-</form> 
+    </form>
+</div>
 {% endblock %}
